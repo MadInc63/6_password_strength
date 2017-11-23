@@ -38,14 +38,14 @@ def check_password_in_black_list(password, password_file):
 
 
 def get_password_strength(password, min_length, max_length, password_file):
-    password_list = [check_min_password_length(password, min_length),
-                     check_max_password_length(password, max_length),
-                     check_digit_in_password(password),
-                     check_lowercase_in_password(password),
-                     check_uppercase_in_password(password),
-                     check_symbol_in_password(password),
-                     check_password_in_black_list(password, password_file)]
-    password_strength = sum(password_list)
+    checklist = [check_min_password_length(password, min_length),
+                 check_max_password_length(password, max_length),
+                 check_digit_in_password(password),
+                 check_lowercase_in_password(password),
+                 check_uppercase_in_password(password),
+                 check_symbol_in_password(password),
+                 check_password_in_black_list(password, password_file)]
+    password_strength = sum(checklist)
     return password_strength
 
 
