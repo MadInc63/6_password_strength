@@ -1,16 +1,12 @@
 import re
+import getpass
 
 
-def load_common_password():
+def load_passwords_file():
     with open('10_million_password_list_top_10000.txt', 'r',
               encoding="utf-8") as password_words:
         black_list = password_words.read()
         return black_list
-
-
-def password_text_to_dict(black_list):
-    black_list_dict = re.findall(r'\w+', black_list)
-    return black_list_dict
 
 
 def check_min_password_length(password, min_length):
@@ -34,25 +30,24 @@ def check_uppercase_in_password():
 
 
 def check_symbol_in_password():
-    return bool(re.search(r'[@#$]', password))
+    return bool(re.search(r'[@#$%^&*!~";:?+-/|\=_]', password))
 
 
-def check_password_in_black_list(password, password_dict):
+def check_password_in_black_list(password, password_file):
     flag = 4
-    for word in password_dict:
-        if password == word:
-            flag = 0
+    if password in password_file:
+        flag = 0
     return flag
 
 
-def get_password_strength(password, min_length, max_length, password_dict):
+def get_password_strength(password, min_length, max_length, password_file):
     password_list = [check_min_password_length(password, min_length),
                      check_max_password_length(password, max_length),
                      check_digit_in_password(password),
                      check_lowercase_in_password(password),
                      check_uppercase_in_password(),
                      check_symbol_in_password(),
-                     check_password_in_black_list(password, password_dict)]
+                     check_password_in_black_list(password, password_file)]
     password_strength = sum(password_list)
     return password_strength
 
@@ -60,10 +55,8 @@ def get_password_strength(password, min_length, max_length, password_dict):
 if __name__ == '__main__':
     min_length = 8
     max_length = 12
-    password = input('Enter your password: ')
-    load_password_file = load_common_password()
-    password_dict = password_text_to_dict(load_password_file)
-    print('Password strength score = {}'.format(get_password_strength(password,
-                                                             min_length,
-                                                             max_length,
-                                                             password_dict)))
+    password = getpass.getpass('Type your password: ')
+    password_file = load_passwords_file()
+    print('Password strength score = {}'.format(get_password_strength
+                                                (password, min_length,
+                                                 max_length, password_file)))
